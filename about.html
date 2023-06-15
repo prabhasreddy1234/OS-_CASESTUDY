@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <style> @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap');
+        html { 
+        height: 100%;
+        }
+        .img:hover{
+            transform: scale(1.5);
+            transition: 0.5s;
+        
+            }
+        body{
+          font-family: 'Roboto Mono', monospace;
+          overflow:hidden;
+          width: 100%;
+          height: 300px;
+          text-align: center;
+          margin: 0;
+          background-color: black ;
+          color: #a6a6a6;
+        }
+        .container {
+          padding-top: 2rem;
+          position: relative;
+          top: 2rem;
+        }
+        a{
+          text-decoration: none;
+        }
+        .container h1{
+          color: white;
+          font-size: 190%;
+           overflow: hidden; /* Ensures the content is not revealed until the animation */
+          border-right: .1em solid #a6a6a6; /* The typwriter cursor */
+          white-space: nowrap; /* Keeps the content on a single line */
+          margin: 0 auto; /* Gives that scrolling effect as the typing happens */
+          letter-spacing: .15em;
+          animation: 
+            typing 3.5s steps(10, end) forwards ,
+            blink-caret .75s step-end infinite ;
+            
+        }
+        @media (min-width: 1170px){
+        /* The typing effect */
+        @keyframes typing {
+          from { width: 0 }
+          to { width: 28% }
+        }
+        }
+        @media (max-width: 1169.99px){
+        /* The typing effect */
+        @keyframes typing {
+          from { width: 0 }
+          to { width: 37% }
+        }
+        }
+        @media (max-width: 969.99px){
+        /* The typing effect */
+        @keyframes typing {
+          from { width: 0 }
+          to { width: 45% }
+        }
+        }
+        @media (max-width: 769.99px){
+        /* The typing effect */
+        @keyframes typing {
+          from { width: 0 }
+          to { width: 70% }
+        }
+        }
+        @media (max-width: 469.99px){
+          .container h1{
+            letter-spacing: 80%; 
+            font-size: 150%;
+          }
+        /* The typing effect */
+        @keyframes typing {
+          from { width: 0 }
+          to { width: 85% }
+        }
+        }
+        /* The typewriter cursor effect */
+        @keyframes blink-caret {
+          from { border-color: transparent }
+          to { border-color: transparent ;
+                opacity: 0; }
+          50% { border-color: white; }
+        }
+        .button {
+    background-color: #a6a6a6;
+    border: none;
+    color: black;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 12px;
+    position: relative;
+    top: 2rem;
+}
+@keyframes move-background {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+.background-effect {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.4;
+            background-image: linear-gradient(45deg, #a6a6a6, #000000, #FF0000,white, #0000FF);
+            background-size: 200% 200%;
+            animation: move-background 10s linear infinite;
+        }
+
+        </style>
+
+        <script>let w = 1400;
+            let h = 1400;
+            let scale = 20;
+            let rows = (h / scale);
+            let cols = (w / scale);
+            let mountains = [];
+            let fly = 0;
+            
+            function setup() {
+                createCanvas(windowWidth, windowHeight, WEBGL);
+                background(0);
+            }
+            
+            function draw() {
+                orbitControl();
+                background(0);
+                fly += .05;
+            
+                let yOff = fly;
+            
+                for (let i = 0; i < rows; i++) {
+                    mountains[i] = [];
+                    let xOff = 0;
+                    for (let j = 0; j < cols; j++) {
+                        mountains[i][j] = map(noise(xOff, yOff), 0, 1, -40, 60);
+                        xOff += 0.3;
+                    }
+                    yOff += 0.3;
+                }
+            
+                fill(166);
+                
+                rotateX(PI / 3);
+                translate(-w / 2, -h / 2);
+            
+                for (let i = 0; i < rows; i++) {
+                    beginShape(TRIANGLE_STRIP);
+                    for (let j = 0; j < cols; j++) {
+                        vertex(j * scale, i * scale, mountains[j][i]);
+                        vertex(j * scale, (i + 1) * scale, mountains[j][i]);
+                    }
+                    endShape();
+                }
+            }
+            setInterval(setup, 0.10);</script>
+    <div class="container">
+      <div class="background-effect"></div>
+        <h2>About Amiga OS</h2>
+        <p>It was developed first by Commodore International and introduced with the launch of the first Amiga, the Amiga 1000, in 1985. Early versions of AmigaOS required the Motorola 68000 series of 16-bit and 32-bit microprocessors. Later versions were developed by Haage & Partner (AmigaOS 3.5 and 3.9) and then Hyperion Entertainment (AmigaOS 4.0-4.1). A PowerPC microprocessor is required for the most recent release, AmigaOS 4.
+
+            AmigaOS is a single-user operating system baseAmigaOS is a single-user operating system based on a preemptive multitasking.The Amiga operating system (AmigaOS) used a scheduling algorithm known as "Round Robin with Priority" for managing tasks and processes. This scheduling algorithm was implemented to provide multitasking capabilities on the Amiga platform.
+
+            In the Round Robin with Priority algorithm, each process or task is assigned a priority level. The higher the priority level, the more important the task is considered by the scheduler. Tasks with the same priority level are scheduled in a round-robin fashion, where each task is given a fixed time slice to execute before being preempted and moved to the back of the queue.
+            
+            AmigaOS used a preemption mechanism based on vertical blank interrupts (VBLs). The VBL interrupt occurred during the vertical blanking interval of the Amiga's display hardware, which provided a regular and predictable time slot for the operating system to perform various tasks, including task scheduling. During each VBL, the scheduler determined which task should be given control of the CPU based on its priority level.
+            
+            The Round Robin with Priority algorithm ensured that higher-priority tasks received more CPU time compared to lower-priority tasks. This approach allowed for responsive multitasking on the Amiga, as time-critical tasks could be assigned higher priorities to ensure timely execution.
+            
+            It's worth mentioning that while the Round Robin with Priority algorithm was the primary scheduling algorithm used in AmigaOS, the operating system also incorporated other features such as inter-task communication and message passing to facilitate task coordination and synchronization.</p>
+    </div>
+    <br>
+    <br>
+    <br>
+    <div class="img">
+        <center><img src="Amigaos.png" alt=""></center>
+    </div>
+    <a href="index.html"><button class="button">Go To Home</button></a>
+</body>
+</html>

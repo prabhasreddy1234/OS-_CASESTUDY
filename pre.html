@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Preemptive Priority Scheduling Calculator</title>
+
+  <style>
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    label {
+      font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="number"] {
+      padding: 5px;
+      border-radius: 5px;
+      border: 1px solid #000;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 5px 10px;
+      border-radius: 5px;
+      border: none;
+      background-color: #050505;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 10px;
+      text-align: center;
+      border: 1px solid #000;
+    }
+
+    th {
+      background-color: #000000;
+      color: #fff;
+    }
+
+    tbody tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    .gantt-chart {
+      margin-top: 30px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .gantt-bar {
+      position: relative;
+      height: 30px;
+      background-color: #050505;
+      color: #fff;
+      text-align: center;
+      line-height: 30px;
+      font-size: 14px;
+      font-weight: bold;
+    }
+    .button {
+    background-color: #a6a6a6;
+    border: none;
+    color: black;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 12px;
+    position: relative;
+    top: 2rem;
+}
+
+
+    .gantt-bar::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 0%;
+      background-color: #CDDC39;
+      transition: width 0.5s;
+    }
+
+    .gantt-bar.completed::before {
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Preemptive Priority Scheduling Calculator</h1>
+    <form>
+      <div class="form-group">
+        <label for="process-name">Process Name:</label>
+        <input type="text" id="process-name" />
+      </div>
+      <div class="form-group">
+        <label for="arrival-time">Arrival Time:</label>
+        <input type="number" id="arrival-time" min="0" />
+      </div>
+      <div class="form-group">
+        <label for="burst-time">Burst Time:</label>
+        <input type="number" id="burst-time" min="1" />
+      </div>
+      <div class="form-group">
+        <label for="priority">Priority:</label>
+        <input type="number" id="priority" min="1" />
+      </div>
+      <button type="button" onclick="addProcess()">Add Process</button>
+    </form>
+    <table>
+      <thead>
+        <tr>
+          <th>Process Name</th>
+          <th>Arrival Time</th>
+          <th>Burst Time</th>
+          <th>Priority</th>
+          <th>Completion Time</th>
+          <th>Turnaround Time</th>
+          <th>Waiting Time</th>
+        </tr>
+      </thead>
+      <tbody id="processes"></tbody>
+    </table>
+    <button type="button" onclick="calculate()">Calculate</button>
+    <div class="gantt-chart" id="gantt-chart"></div>
+  </div>
+  <center><a href="sc.html"><button class="button">Go To Home</button></a></center>
+  <script src="javascript.js"></script>
+</body>
+</html>

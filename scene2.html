@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Animation Website with Video</title>
+  <style>
+    /* Reset default margin and padding */
+    body, h1, p {
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Styling for header */
+    header {
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      padding: 20px;
+    }
+
+    /* Styling for main content */
+    main {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 400px;
+    }
+
+    /* Styling for animation container */
+    .animation-container {
+      position: relative;
+      width: 600px; 
+      height: 400px;
+    }
+
+    /* Styling for video */
+    video {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Styling for footer */
+    footer {
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      padding: 10px;
+    }
+    .button {
+    background-color: #a6a6a6;
+    border: none;
+    color: black;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 12px;
+    position: relative;
+    top: 2rem;
+}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Process Synchronization</h1>
+  </header>
+  
+  <main>
+    <div class="animation-container">
+      <video src="v2.mov" autoplay loop muted></video>
+    </div>
+  </main>
+  
+  <footer>
+    <p>Critical Section<br>
+        This process involves receiving and processing user request for video content, retrieving the requested content from a server, and streaming the content to the user’s device. Additionally , online streaming must manage multiple user sessions simultaneously to ensure that each user’s experience is personalized and seamless.<br></p>
+        <a href="scene3.html"><button class="button">Next Scene</button></a>
+  </footer>
+
+</body>
+</html>

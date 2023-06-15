@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>SJF Scheduling Algorithm</title>
+    
+	<style>
+		body {
+			background-color: #F6F6F6;
+			font-family: Arial, sans-serif;
+			margin: 0;
+			padding: 0;
+		}
+		h1 {
+			color: #333;
+			font-size: 36px;
+			margin: 20px;
+			text-align: center;
+		}
+		p {
+			color: #333;
+			font-size: 18px;
+			margin: 20px;
+			text-align: center;
+		}
+		table {
+			background-color: #FFF;
+			border-collapse: collapse;
+			margin: 20px auto;
+			width: 80%;
+		}
+		table th, table td {
+			border: 1px solid #CCC;
+			padding: 10px;
+			text-align: center;
+		}
+		table th {
+			background-color: #333;
+			color: #FFF;
+			font-size: 16px;
+			font-weight: normal;
+			padding: 15px;
+			text-transform: uppercase;
+		}
+		button {
+			background-color: #333;
+			border: none;
+			border-radius: 5px;
+			color: #FFF;
+			cursor: pointer;
+			display: block;
+			font-size: 18px;
+			margin: 20px auto;
+			padding: 10px 20px;
+			text-align: center;
+			text-transform: uppercase;
+		}
+		button:hover {
+			background-color: #555;
+		}
+		#results {
+			background-color: #FFF;
+			margin: 20px auto;
+			padding: 20px;
+			text-align: center;
+			width: 80%;
+		}
+		#results h2 {
+			color: #333;
+			font-size: 24px;
+			margin: 0 0 20px;
+			text-align: center;
+		}
+		#results p {
+			color: #333;
+			font-size: 18px;
+			margin: 0;
+			text-align: left;
+		}
+		.button {
+    background-color: #a6a6a6;
+    border: none;
+    color: black;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 12px;
+    position: relative;
+    top: 2rem;
+}
+
+	</style>
+</head>
+<body>
+    
+	<h1>SJF Scheduling Algorithm</h1>
+	<p>Enter the arrival time and burst time for each process:</p>
+	<table>
+		<thead>
+			<tr>
+				<th>Process</th>
+				<th>Arrival Time</th>
+				<th>Burst Time</th>
+			</tr>
+		</thead>
+		<tbody id="processes">
+		</tbody>
+	</table>
+	<button onclick="addProcess()">Add Process</button>
+	<button onclick="calculate()">Calculate</button>
+	<div id="results"></div>
+    <center><a href="sc.html"><button class="button">Go To Home</button></a></center>
+   
+	<script>
+        var processes = [];
+		var numProcesses = 0;
+
+		function addProcess() {
+			var table = document.getElementById("processes");
+			var row = table.insertRow(-1);
+			var process = "P" + numProcesses;
+			var arrivalTime = parseInt(prompt("Enter the arrival time for " + process));
+			var burstTime = parseInt(prompt("Enter the burst time for " + process));
+			row.insertCell(0).innerHTML = process;
+			row.insertCell(1).innerHTML = arrivalTime;
+			row.insertCell(2).innerHTML = burstTime;
+			processes.push({
+				name: process,
+				arrivalTime: arrivalTime,
+				burstTime: burstTime,
+				waitingTime: 0,
+				turnaroundTime: 0,
+				completionTime: 0,
+				processed: false
+			});
+			numProcesses++;
+		}
+
+		function calculate() {
+			var currentTime = 0;
+			var numProcessed = 0;
+			var table = document.getElementById("processes");
+			var results = document.getElementById("results");
+			while (numProcessed < numProcesses) {
+				var shortest = null;
+				for (var i = 0; i < numProcesses; i++) {
+					if (processes[i].arrivalTime <= currentTime && !processes[i].processed) {
+						if (shortest == null || processes[i].burstTime < processes[shortest].burstTime) {
+							shortest = i;
+						}
+					}
+				}
+				if (shortest == null) {
+					currentTime++;
+				} else {
+					processes[shortest].completionTime = currentTime + processes[shortest].burstTime;
+					processes[shortest].turnaroundTime = processes[shortest].completionTime - processes[shortest].arrivalTime;
+					processes[shortest].waitingTime = processes[shortest].turnaroundTime - processes[shortest].burstTime;
+					processes[shortest].processed = true;
+					numProcessed++;
+					currentTime = processes[shortest].completionTime;
+				}
+			}
+			var avgWaitingTime = 0;
+			var avgTurnaroundTime = 0;
+            table.innerHTML = "<tr><th>Process</th><th>Arrival Time</th><th>Burst Time</th><th>Completion Time</th><th>Waiting Time</th><th>Turnaround Time</th></tr>";
+			for (var i = 0; i < numProcesses; i++) {
+				table.innerHTML += "<tr><td>" + processes[i].name + "</td><td>" + processes[i].arrivalTime + "</td><td>" + processes[i].burstTime + "</td><td>" + processes[i].completionTime + "</td><td>" + processes[i].waitingTime + "</td><td>" + processes[i].turnaroundTime + "</td></tr>";
+				avgWaitingTime += processes[i].waitingTime;
+				avgTurnaroundTime += processes[i].turnaroundTime;
+			}
+			avgWaitingTime /= numProcesses;
+			avgTurnaroundTime /= numProcesses;
+			results.innerHTML = "<h2>Results:</h2><p>Average Waiting Time: " + avgWaitingTime.toFixed(2) + "</p><p>Average Turnaround Time: " + avgTurnaroundTime.toFixed(2) + "</p>";
+			results.appendChild(table);
+		}
+	</script>
+</body>
+</html>

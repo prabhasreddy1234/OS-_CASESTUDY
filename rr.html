@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Round Robin Scheduling Calculator</title>
+	<!-- <link rel="stylesheet" type="text/css" href="xyz.css"> -->
+	<style>
+		
+
+.button {
+    background-color: grey;
+    border: none;
+    color: black;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 16px;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: rgb(241, 244, 244);
+
+}
+
+h1 {
+    text-align: center;
+    margin-top: 50px;
+}
+
+form {
+    margin: 50px auto;
+    width: 600px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+input[type="number"] {
+    width: 60px;
+}
+
+table {
+    margin-top: 20px;
+    border-collapse: collapse;
+}
+
+thead th {
+    padding: 10px;
+    background-color: grey;
+    border: 1px solid #0b0b0b;
+    text-align: center;
+}
+
+tbody td {
+    padding: 10px;
+    border: 1px solid grey;
+    text-align: center;
+}
+
+input[type="submit"] {
+    display: block;
+
+    margin: output-table {
+        margin-top: 50px;
+        display:none;
+    }
+
+    @media screen and (max-width: 600px) {
+        form {
+            width: 90%;
+        }
+    }
+		
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {background-color: grey;}
+
+.button {
+    background-color: grey;
+    border: none;
+    color: black;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 12px;
+    position: relative;
+    top: 2rem;
+}
+
+	</style>
+</head>
+<body>
+
+	
+	<h1>Round Robin Scheduling Calculator</h1>
+	
+	<form id="rr-form">
+		<label for="num-processes">Number of processes:</label>
+		<input type="number" id="num-processes" name="num-processes" min="1" required>
+		
+		<label for="time-quantum">Time quantum:</label>
+		<input type="number" id="time-quantum" name="time-quantum" min="1" required>
+		
+		<table>
+			<thead>
+				<tr>
+					<th>Process</th>
+					<th>Arrival time</th>
+					<th>Burst time</th>
+				</tr>
+			</thead>
+			<tbody>
+				<!-- Dynamic rows for process inputs -->
+			</tbody>
+		</table>
+		
+		<center><input class="button" type="submit" value="Calculate"></center>
+	</form>
+	
+	<table id="output-table" style="display: none;">
+		<thead>
+			<tr>
+				<th>Process</th>
+				<th>Arrival time</th>
+				<th>Burst time</th>
+				<th>Completion time</th>
+				<th>Turnaround time</th>
+				<th>Waiting time</th>
+			</tr>
+		</thead>
+		<tbody>
+			<!-- Dynamic rows for output -->
+		</tbody>
+	</table>
+	
+	<script>
+		// Function to calculate the Round Robin scheduling
+		const calculate = () => {
+			// Get the form inputs
+			const numProcesses = parseInt(document.getElementById("num-processes").value);
+			const timeQuantum = parseInt(document.getElementById("time-quantum").value);
+			const arrivalInputs = document.getElementsByName("arrival-time");
+			const burstInputs = document.getElementsByName("burst-time");
+			
+			// Create arrays to store the input values
+			const arrivalTimes = [];
+			const burstTimes = [];
+			for (let i = 0; i < numProcesses; i++) {
+				arrivalTimes.push(parseInt(arrivalInputs[i].value));
+				burstTimes.push(parseInt(burstInputs[i].value));
+			}
+			
+			// Calculate the completion times, turnaround times, and waiting times
+			const completionTimes = [];
+			const remainingTimes = [...burstTimes];
+			let currentTime = Math.min(...arrivalTimes);
+			let done = false;
+			while (!done) {
+				done = true;
+				for (let i = 0; i < numProcesses; i++) {
+					if (remainingTimes[i] > 0) {
+						done = false;
+						if (remainingTimes[i] <= timeQuantum) {
+							currentTime += remainingTimes[i];
+							completionTimes[i] = currentTime;
+							remainingTimes[i] = 0;
+						} else {
+							currentTime += timeQuantum;
+							remainingTimes[i] -= timeQuantum;
+						}
+					}
+				}
+			}
+			const turnaroundTimes = completionTimes.map((completionTime, index) => completionTime - arrivalTimes[index]);
+			const waitingTimes = turnaroundTimes.map((turnaroundTime, index) => turnaroundTime - burstTimes[index]);
+			
+			// Output the results to the table
+			const outputTable = document.getElementById("output-table");
+			const tbody = outputTable
+            .getElementsByTagName("tbody")[0];
+		tbody.innerHTML = "";
+		for (let i = 0; i < numProcesses; i++) {
+			const row = document.createElement("tr");
+			const processCell = document.createElement("td");
+			processCell.textContent = i + 1;
+			row.appendChild(processCell);
+			const arrivalCell = document.createElement("td");
+			arrivalCell.textContent = arrivalTimes[i];
+			row.appendChild(arrivalCell);
+			const burstCell = document.createElement("td");
+			burstCell.textContent = burstTimes[i];
+			row.appendChild(burstCell);
+			const completionCell = document.createElement("td");
+			completionCell.textContent = completionTimes[i];
+			row.appendChild(completionCell);
+			const turnaroundCell = document.createElement("td");
+			turnaroundCell.textContent = turnaroundTimes[i];
+			row.appendChild(turnaroundCell);
+			const waitingCell = document.createElement("td");
+			waitingCell.textContent = waitingTimes[i];
+			row.appendChild(waitingCell);
+			tbody.appendChild(row);
+		}
+		
+		// Show the output table
+		outputTable.style.display = "table";
+	}
+	
+	// Add event listener to the form submission
+	const rrForm = document.getElementById("rr-form");
+	rrForm.addEventListener("submit", event => {
+		event.preventDefault();
+		calculate();
+	});
+	
+	// Add event listener to the number of processes input to dynamically generate rows
+	const numProcessesInput = document.getElementById("num-processes");
+	numProcessesInput.addEventListener("input", event => {
+		const numProcesses = parseInt(numProcessesInput.value);
+		const tbody = document.querySelector("#rr-form tbody");
+		tbody.innerHTML = "";
+		for (let i = 0; i < numProcesses; i++) {
+			const row = document.createElement("tr");
+			const processCell = document.createElement("td");
+			processCell.textContent = i + 1;
+			row.appendChild(processCell);
+			const arrivalCell = document.createElement("td");
+			const arrivalInput = document.createElement("input");
+			arrivalInput.type = "number";
+			arrivalInput.name = "arrival-time";
+			arrivalInput.min = "0";
+			arrivalInput.required = true;
+			arrivalCell.appendChild(arrivalInput);
+			row.appendChild(arrivalCell);
+			const burstCell = document.createElement("td");
+			const burstInput = document.createElement("input");
+			burstInput.type = "number";
+			burstInput.name = "burst-time";
+			burstInput.min = "1";
+			burstInput.required = true;
+			burstCell.appendChild(burstInput);
+			row.appendChild(burstCell);
+			tbody.appendChild(row);
+		}
+		
+		// Hide the output table
+		const outputTable = document.getElementById("output-table");
+		outputTable.style.display = "none";
+	});
+</script>
+ <center><a href = "sc.html"><button class="button">Go To Home</button></a></center>
+</body>
+</html>
